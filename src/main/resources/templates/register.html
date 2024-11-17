@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" >
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/styles.css}"/>
+    <meta charset="ISO-8859-1">
+</head>
+<body>
+    <div class="container mt-5">
+        <form th:action="@{/register/new}" th:object="${user}" method="post">
+            <h1 class="text-center bold font-weight-bold mb-4">Login</h1>
+
+            <!-- Error message display-->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <div th:if="${error}" class="alert alert-danger" role="alert">
+                            <p th:text="${error}"></p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email"  th:field="*{email}" class="form-control" id="email" aria-describedby="emailHelp" required>
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" th:field="*{password}" class="form-control" id="password" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="username" class="form-label">user_name</label>
+                <input type="text" th:field="*{userName}" class="form-control" id="username" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="first_name" class="form-label">first_name</label>
+                <input type="text" th:field="*{firstName}" class="form-control" id="first_name" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="last_name" class="form-label">last_name</label>
+                <input type="text" th:field="*{lastName}" class="form-control" id="last_name" required>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <select
+                            required
+                            class="form-control"
+                            th:field="*{roles}"
+                    >
+                        <th:block th:each="role :${roles}">
+
+                            <option
+                                    th:text="${role.name}"
+                                    th:value="${role.name}"
+                            ></option>
+                        </th:block>
+                    </select>
+                    <input name="role.id" id="role.id" hidden="hidden" value=""/>
+                </div>
+            </div>
+            <br>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</body>
+
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+</html>
