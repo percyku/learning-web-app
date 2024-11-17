@@ -1,1 +1,1 @@
-intial create
+initial create
