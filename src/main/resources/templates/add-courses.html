@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/font-awesome.min.css}"/>
+    <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/styles.css}"/>
+    <meta charset="ISO-8859-1">
+</head>
+<body>
+    <div class="container mt-5">
+        <form th:action="@{/dashboard/addNew}" th:object="${course}" method="post">
+            <h1 class="text-center bold font-weight-bold mb-4">Instructor Profile</h1>
+
+            <input type="hidden"  th:field="*{id}" class="form-control" id="id" >
+
+
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text"  th:field="*{title}" class="form-control" id="title" >
+            </div>
+
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="text" th:field="*{price}" class="form-control" id="price" >
+            </div>
+
+
+
+
+            <div class="col-md-12 form-group">
+                <label class="mt-2 heading_font font_sub_heading_color">Description</label>
+                <textarea type="text" rows="4" id="content" placeholder="Content" class="form-control"
+                              th:field="*{description}" autocomplete="off"></textarea>
+            </div>
+
+            <br>
+
+
+            <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+    </div>
+</body>
+
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+</html>

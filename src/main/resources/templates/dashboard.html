@@ -34,8 +34,17 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto">
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/}">update profile</a></li>
+<!--                <li active  class="nav-item mx-0 mx-lg-1"><a sec:authorize="hasAuthority('ROLE_STUDENT')"  class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/}">Search All Courses</a></li>-->
+                <li class="nav-item mx-0 mx-lg-1"><a sec:authorize="hasAuthority('ROLE_STUDENT')"  class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/}">View Saved Courses</a></li>
+                <li class="nav-item mx-0 mx-lg-1"><a sec:authorize="hasAuthority('ROLE_STUDENT')" class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/student_profile/}">Update Profile</a></li>
+
+
+                <li class="nav-item mx-0 mx-lg-1"><a sec:authorize="hasAuthority('ROLE_INSTRUCTOR')"  class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/dashboard/add}">Post New Course</a></li>
+<!--                <li active class="nav-item mx-0 mx-lg-1" ><a sec:authorize="hasAuthority('ROLE_INSTRUCTOR')"  class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/}">View All Your Courses</a></li>-->
+                <li class="nav-item mx-0 mx-lg-1"><a sec:authorize="hasAuthority('ROLE_INSTRUCTOR')"  class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/instructor_profile/}">Update Profile</a></li>
+
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/logout}">Logout</a></li>
+
 
             </ul>
         </div>
@@ -45,16 +54,42 @@
 <header class="masthead bg-primary text-white text-center">
     <div class="container d-flex align-items-center flex-column">
 
-        <!-- Masthead Heading-->
-        <h1 class="masthead-heading text-uppercase mb-0">Start Bootstrap</h1>
-        <!-- Icon Divider-->
-        <div class="divider-custom divider-light">
-            <div class="divider-custom-line"></div>
-            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
-            <div class="divider-custom-line"></div>
+
+
+        <div class="box" sec:authorize="hasAuthority('ROLE_INSTRUCTOR')">
+            <h1 class="primary-title">Recruiter Dashboard</h1>
         </div>
-        <!-- Masthead Subheading-->
-        <p class="masthead-subheading font-weight-light mb-0">Graphic Artist - Web Designer - Illustrator</p>
+
+        <th:block th:each="pageCourse:${pageCourse}">
+            <div class="box">
+                <a
+                        th:href="@{/dashboard/edit/{id}(id=${pageCourse.id})}"
+                        style="text-decoration: none; color: black"
+                >
+                    <div class="row">
+                        <div class="container d-flex align-items-center col-md-3">
+                            <p class="masthead-subheading font-weight-light mb-0">[[${pageCourse.title}]]</p>
+                        </div>
+
+                        <div class="container d-flex align-items-center col-md-2">
+                            <p class="masthead-subheading font-weight-light mb-0">[[${pageCourse.students.size()}]] people</p>
+                        </div>
+
+                        <div class="container d-flex align-items-center col-md-1">
+                            <p class="masthead-subheading font-weight-light mb-0">[[${pageCourse.price}]] $</p>
+                        </div>
+
+                        <div class="container d-flex align-items-center col-md-6">
+                            <p class="masthead-subheading font-weight-light mb-0">[[${pageCourse.description}]] </p>
+                        </div>
+                    </div>
+
+                </a>
+            </div>
+
+        </th:block>
+
+
     </div>
 </header>
 
@@ -95,15 +130,26 @@
 <div class="copyright py-4 text-center text-white">
     <div class="container"><small>Copyright &copy; Your Website 2023</small></div>
 </div>
-<!-- Bootstrap core JS-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Core theme JS-->
-<script src="js/scripts.js"></script>
+<!--&lt;!&ndash; Bootstrap core JS&ndash;&gt;-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>-->
+<!--&lt;!&ndash; Core theme JS&ndash;&gt;-->
+<!--<script src="js/scripts.js"></script>-->
+
+
+<script
+        type="text/javascript"
+        th:src="@{/webjars/jquery/jquery.min.js}"
+></script>
+<script
+        type="text/javascript"
+        th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"
+></script>
+
+<script type="text/javascript" th:src="@{/js/scripts.js}"></script>
 
 
 
-
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->:q
+<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
 <!-- * *                               SB Forms JS                               * *-->
 <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->

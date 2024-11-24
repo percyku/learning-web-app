@@ -4,6 +4,11 @@ import com.percyku.learning_web_app.dao.UserDao;
 import com.percyku.learning_web_app.entity.Role;
 import com.percyku.learning_web_app.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,4 +57,24 @@ public class UserService {
 
         return user;
     }
+
+    public Object getCurrentUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if(!(authentication instanceof AnonymousAuthenticationToken)){
+            String username = authentication.getName();
+            User user= userDao.findUserByEmail(authentication.getName());
+
+            if(authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STUDENT"))){
+                return user;
+            }else{
+                return user;
+            }
+        }
+
+        return null;
+    }
+
+
 }
