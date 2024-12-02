@@ -54,42 +54,47 @@
 <header class="masthead bg-primary text-white text-center">
     <div class="container d-flex align-items-center flex-column">
 
+        <div class="box" sec:authorize="hasAuthority('Job Seeker')">
+            <h1 class="primary-title">Candidate Dashboard</h1>
+            <form id="myForm" th:action="@{/dashboard/}">
+                <div class="inner">
+                    <input id="job" class="radius-left" type="text" placeholder="Search for a job" name="job"
+                           th:value="${job}"/>
+                    <input id="loc" class="" type="text" placeholder="Job Location" name="location" th:value="${location}"/>
+                    <button class="radius-right" type="submit" form="myForm"><i class="fa fa-search"></i></button>
+                </div>
+            </form>
+        </div>
 
 
         <div class="box" sec:authorize="hasAuthority('ROLE_INSTRUCTOR')">
             <h1 class="primary-title">Recruiter Dashboard</h1>
         </div>
 
-        <th:block th:each="pageCourse:${pageCourse}">
-            <div class="box">
-                <a
-                        th:href="@{/dashboard/edit/{id}(id=${pageCourse.id})}"
-                        style="text-decoration: none; color: black"
-                >
-                    <div class="row">
-                        <div class="container d-flex align-items-center col-md-3">
-                            <p class="masthead-subheading font-weight-light mb-0">[[${pageCourse.title}]]</p>
-                        </div>
+        <table class="table" sec:authorize="hasAuthority('ROLE_INSTRUCTOR')">
+            <thead>
+            <tr>
+                <th scope="col">Detail</th>
+                <th scope="col">Course</th>
+                <th scope="col">Number</th>
+                <th scope="col">Cost</th>
+                <th scope="col">Desc</th>
+            </tr>
+            </thead>
+            <tbody>
+                <th:block th:each="pageCourse:${pageCourse}">
 
-                        <div class="container d-flex align-items-center col-md-2">
-                            <p class="masthead-subheading font-weight-light mb-0">[[${pageCourse.students.size()}]] people</p>
-                        </div>
+                        <tr>
+                            <td><a th:href="@{/dashboard/edit/{id}(id=${pageCourse.id})}" style="color:black"> Detail</a></td>
+                            <td>[[${pageCourse.title}]]</td>
+                            <td>[[${pageCourse.students.size()}]] people</td>
+                            <td>[[${pageCourse.price}]] $</td>
+                            <td>[[${pageCourse.description}]]</td>
+                        </tr>
+                </th:block>
 
-                        <div class="container d-flex align-items-center col-md-1">
-                            <p class="masthead-subheading font-weight-light mb-0">[[${pageCourse.price}]] $</p>
-                        </div>
-
-                        <div class="container d-flex align-items-center col-md-6">
-                            <p class="masthead-subheading font-weight-light mb-0">[[${pageCourse.description}]] </p>
-                        </div>
-                    </div>
-
-                </a>
-            </div>
-
-        </th:block>
-
-
+            </tbody>
+        </table>
     </div>
 </header>
 

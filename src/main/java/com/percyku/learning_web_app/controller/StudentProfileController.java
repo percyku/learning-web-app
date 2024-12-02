@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +21,12 @@ public class StudentProfileController {
 
     private UserService userService;
     private StudentProfileService studentProfileService;
+    private PasswordEncoder passwordEncoder;
     @Autowired
-    public StudentProfileController(UserService userService, StudentProfileService studentProfileService) {
+    public StudentProfileController(UserService userService, StudentProfileService studentProfileService,PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.studentProfileService =studentProfileService;
+        this.passwordEncoder=passwordEncoder;
     }
 
 
@@ -68,7 +71,7 @@ public class StudentProfileController {
 
             boolean logoutFlag=false;
             if(!studentProfile.getPassword().equals("")){
-                user.setPassword(studentProfile.getPassword());
+                user.setPassword(passwordEncoder.encode(studentProfile.getPassword()));
                 logoutFlag=true;
             }
             studentProfileService.addNew(user);
