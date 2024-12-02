@@ -35,7 +35,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ms-auto">
 <!--                <li active  class="nav-item mx-0 mx-lg-1"><a sec:authorize="hasAuthority('ROLE_STUDENT')"  class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/}">Search All Courses</a></li>-->
-                <li class="nav-item mx-0 mx-lg-1"><a sec:authorize="hasAuthority('ROLE_STUDENT')"  class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/}">View Saved Courses</a></li>
+                <li class="nav-item mx-0 mx-lg-1"><a sec:authorize="hasAuthority('ROLE_STUDENT')"  class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/dashboard/}">View Saved Courses</a></li>
                 <li class="nav-item mx-0 mx-lg-1"><a sec:authorize="hasAuthority('ROLE_STUDENT')" class="nav-link py-3 px-0 px-lg-3 rounded" th:href="@{/student_profile/}">Update Profile</a></li>
 
 
@@ -54,13 +54,11 @@
 <header class="masthead bg-primary text-white text-center">
     <div class="container d-flex align-items-center flex-column">
 
-        <div class="box" sec:authorize="hasAuthority('Job Seeker')">
+        <div class="box" sec:authorize="hasAuthority('ROLE_STUDENT')">
             <h1 class="primary-title">Candidate Dashboard</h1>
             <form id="myForm" th:action="@{/dashboard/}">
                 <div class="inner">
-                    <input id="job" class="radius-left" type="text" placeholder="Search for a job" name="job"
-                           th:value="${job}"/>
-                    <input id="loc" class="" type="text" placeholder="Job Location" name="location" th:value="${location}"/>
+                    <input id="searchCourseName" class="radius-left" type="text" placeholder="Search for a courses" name="searchCourseName" th:value="${searchCourseName}"/>
                     <button class="radius-right" type="submit" form="myForm"><i class="fa fa-search"></i></button>
                 </div>
             </form>
@@ -71,7 +69,7 @@
             <h1 class="primary-title">Recruiter Dashboard</h1>
         </div>
 
-        <table class="table" sec:authorize="hasAuthority('ROLE_INSTRUCTOR')">
+        <table class="table" >
             <thead>
             <tr>
                 <th scope="col">Detail</th>

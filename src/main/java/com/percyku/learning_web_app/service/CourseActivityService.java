@@ -79,6 +79,78 @@ public class CourseActivityService {
     }
 
 
+    public List<PageCourse> getCourseByStudent(User user) {
+
+        User tmpUser = courseActivityDao.findCoursesByStudentId(user.getId());
+
+
+        if(tmpUser == null){
+            return new ArrayList<PageCourse>();
+        }
+
+        List<PageCourse> res=new ArrayList<>();
+        for(Course tmpCourse:tmpUser.getCourses_student()){
+
+            List<Long>students= new ArrayList<>();
+            for(User tmpStudent:tmpCourse.getUsers()){
+                students.add(tmpStudent.getId());
+            }
+
+            PageCourse tmpPageCourse = new PageCourse(
+                    tmpCourse.getId(),
+                    tmpCourse.getTitle(),
+                    tmpCourse.getDescription(),
+                    tmpCourse.getPrice(),
+                    tmpUser,
+                    students,
+                    true
+            );
+
+            res.add(tmpPageCourse);
+        }
+        return res;
+    }
+
+
+
+
+    public List<PageCourse> getCourseByCourseName(String userName,String courseName) {
+        List<Course> tmpCourses = courseActivityDao.findCoursesByCourseName(courseName);
+        List<PageCourse> res=new ArrayList<>();
+        log.debug(tmpCourses.toString());
+        if(tmpCourses.size() >0){
+            User tmpInstructor=tmpCourses.get(0).getUser();
+
+
+            for(Course tmpCourse : tmpCourses){
+                List<Long>students= new ArrayList<>();
+                boolean registered=false;
+                for(User tmpStudent:tmpCourse.getUsers()){
+                    if(userName.equals(tmpStudent.getEmail())){
+                        registered=true;
+                    }
+                    students.add(tmpStudent.getId());
+                }
+
+                PageCourse tmpPageCourse = new PageCourse(
+                        tmpCourse.getId(),
+                        tmpCourse.getTitle(),
+                        tmpCourse.getDescription(),
+                        tmpCourse.getPrice(),
+                        tmpInstructor,
+                        students,
+                        registered
+                );
+                res.add(tmpPageCourse);
+            }
+
+        }
+
+        return res;
+    }
+
+
+
     public Object getCurrentUser() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -2,6 +2,7 @@ package com.percyku.learning_web_app.dao.imp;
 
 import com.percyku.learning_web_app.dao.CourseActivityDao;
 import com.percyku.learning_web_app.entity.Course;
+import com.percyku.learning_web_app.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
@@ -54,6 +55,41 @@ public class CourseActivityDaoImp implements CourseActivityDao {
         //create query
         TypedQuery<Course> query =entityManager.createQuery("from Course where user.id = :data",Course.class);
         query.setParameter("data",theId);
+
+        //execute query
+        List<Course> courses = query.getResultList();
+
+        return courses;
+    }
+
+    @Override
+    public User findCoursesByStudentId(Long theId) {
+        //create query
+        TypedQuery<User> query = entityManager.createQuery(
+                "select c from User c "
+                        +"JOIN FETCH c.courses_student "
+                        +"where c.id = :data",User.class);
+        query.setParameter("data",theId);
+        //execute query
+        User student= null;
+
+        try{
+            student = query.getSingleResult();
+        }catch(NoResultException e){
+            return null;
+        }
+
+        return student;
+    }
+
+
+    @Override
+    public List<Course> findCoursesByCourseName(String name) {
+        //create query
+        TypedQuery<Course> query =entityManager.createQuery("from Course c "
+                +" JOIN FETCH c.user "
+                +" where c.title like '%"+name+"%'",Course.class);
+//        query.setParameter("data",theId);
 
         //execute query
         List<Course> courses = query.getResultList();
