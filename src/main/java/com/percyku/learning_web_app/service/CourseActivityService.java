@@ -111,6 +111,10 @@ public class CourseActivityService {
         return res;
     }
 
+    public User getCoursesByStudentEmail(String email,int courseId){
+        return courseActivityDao.findCourseByStudentEmail(email,courseId);
+    }
+
 
 
 
@@ -168,5 +172,47 @@ public class CourseActivityService {
 
         return null;
     }
+
+
+    @Transactional
+    public Boolean enrollCourse(int courseId) {
+
+        //reference findCourseAndStudentsByCourseId
+
+        User student = (User)getCurrentUser();
+        Course course =courseActivityDao.findCourseByCourseId(courseId);
+
+        log.debug("This student id:"+student.getId()+",email:"+student.getEmail());
+
+        if(course == null){
+            return false;
+        }
+        log.debug("course id:"+course.getId());
+        boolean checkExist=false;
+        List<Long>students= new ArrayList<>();
+        for(User tmpUser: course.getUsers()){
+            if(tmpUser.getId() == student.getId()){
+                checkExist =true;
+            }
+            students.add(tmpUser.getId());
+            log.debug("Each student information:"+tmpUser.toString());
+        }
+
+
+        log.debug("check had been register or not :" +checkExist);
+        if(!checkExist){
+            course.addUsers(student);
+            students.add(student.getId());
+            List<User> tempUsers = course.getUsers();
+            if(tempUsers != null){
+                for(User user : tempUsers){
+                    log.debug("Each enroll student :" +user.toString());
+                }
+            }
+        }
+
+        return true;
+    }
+
 
 }

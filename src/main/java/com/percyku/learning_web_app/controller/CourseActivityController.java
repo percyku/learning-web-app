@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -60,9 +59,6 @@ public class CourseActivityController {
             }
 
         }
-
-
-
         return "dashboard";
     }
 
@@ -72,11 +68,62 @@ public class CourseActivityController {
     @GetMapping("/dashboard/add")
     public String addJobs(Model model){
         model.addAttribute("course",new Course());
-        //model.addAttribute("user",userService.getCurrentUserProfile());
+        model.addAttribute("readonlyEnable",false);
+        return "add-courses";
+    }
+
+    @GetMapping("/dashboard/edit/{id}")
+    public String editCourse(@PathVariable("id")int id , Model model){
+
+        Course course = courseActivityService.findCourseById(id);
+        User user =(User) userService.getCurrentUser();
+
+
+        if(course == null || user == null) return "redirect:/dashboard/";
+        if(course.getUser().getId() != user.getId()) return "redirect:/dashboard/";
+
+        model.addAttribute("course",course);
+        model.addAttribute("readonlyEnable",true);
         return "add-courses";
     }
 
 
+    @GetMapping("/dashboard/course/{id}")
+    public String editOrShowCourse(@PathVariable("id")int id , Model model){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+            String currentUsername = authentication.getName();
+            Course course = courseActivityService.findCourseById(id);
+
+            if(course == null ) return "redirect:/dashboard/";
+
+            log.debug("course:"+course);
+            log.debug("course.getInstructor():"+course.getUser());
+
+            if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_INSTRUCTOR"))) {
+
+                if(!course.getUser().getEmail().equals(currentUsername)) return "redirect:/dashboard/";
+
+                model.addAttribute("course",course);
+
+                model.addAttribute("readonlyEnable",true);
+
+                return "add-courses";
+            }else if (authentication.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_STUDENT"))){
+
+                User user =courseActivityService.getCoursesByStudentEmail(currentUsername,course.getId());
+
+                model.addAttribute("enrollEnable",user== null?false:true);
+                model.addAttribute("course",course);
+                model.addAttribute("instructor",course.getUser());
+
+                return "show-course";
+            }
+        }
+
+        return "redirect:/dashboard/";
+    }
 
     @PostMapping("/dashboard/addNew")
     public String addNew(Course course,Model model){
@@ -98,25 +145,22 @@ public class CourseActivityController {
             courseActivityService.createCourse(checkCourse);
         }
 
-
         return "redirect:/dashboard/";
     }
 
 
-    @GetMapping("/dashboard/edit/{id}")
-    public String editCourse(@PathVariable("id")int id , Model model){
+    @PostMapping("/dashboard/enroll")
+    public String enrollCourse(Course course){
+        log.debug("enrollCourse:"+course);
 
-        Course course = courseActivityService.findCourseById(id);
-        User user =(User) userService.getCurrentUser();
+        courseActivityService.enrollCourse(course.getId());
 
+        return "redirect:/dashboard/";
 
-
-        if(course == null || user == null) return "redirect:/dashboard/";
-        if(course.getUser().getId() != user.getId()) return "redirect:/dashboard/";
-
-        model.addAttribute("course",course);
-
-        return "edit-courses";
     }
+
+
+
+
 
 }

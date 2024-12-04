@@ -10,10 +10,18 @@
 </head>
 <body>
     <div class="container mt-5">
-        <form th:action="@{/dashboard/addNew}" th:object="${course}" method="post">
-            <h1 class="text-center bold font-weight-bold mb-4">Instructor Profile</h1>
+        <h1 class="text-center bold font-weight-bold mb-4">Course Information</h1>
+        <form  th:object="${instructor}">
+            <div class="mb-3">
+                <label for="instructorName" class="form-label">Instructor Name</label>
+                <input type="text"  th:field="*{userName}" class="form-control" id="instructorName" readonly >
+            </div>
+        </form>
+        <form th:action="@{/dashboard/enroll}" th:object="${course}" method="post">
+
 
             <input type="hidden"  th:field="*{id}" class="form-control" id="id" >
+
 
 
             <div class="mb-3">
@@ -23,22 +31,20 @@
 
             <div class="mb-3">
                 <label for="price" class="form-label">Price</label>
-                <input type="text" th:field="*{price}" class="form-control" id="price" >
+                <input type="text" th:field="*{price}" class="form-control" id="price" readonly>
             </div>
-
-
-
 
             <div class="col-md-12 form-group">
                 <label class="mt-2 heading_font font_sub_heading_color">Description</label>
                 <textarea type="text" rows="4" id="content" placeholder="Content" class="form-control"
-                              th:field="*{description}" autocomplete="off"></textarea>
+                              th:field="*{description}" autocomplete="off" readonly></textarea>
             </div>
 
             <br>
 
+            <button type="submit" class="btn btn-primary" th:disabled="${enrollEnable}">Enroll</button>
+            <button type="submit" class="btn btn-primary" th:href="@{/dashboard/}">back</button>
 
-            <button type="submit" class="btn btn-primary">Create</button>
         </form>
     </div>
 </body>

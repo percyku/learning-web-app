@@ -11,7 +11,12 @@ public interface CourseActivityDao {
 
     Course findCourseAndInstructorByCourseId(int id);
 
+    Course findCourseByCourseId(int theId);
+
+
     User findCoursesByStudentId(Long theId);
+
+    User findCourseByStudentEmail(String email,int courseId);
 
     List<Course> findCoursesByInstructorId(Long theId);
 

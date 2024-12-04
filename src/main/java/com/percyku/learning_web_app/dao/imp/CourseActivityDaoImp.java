@@ -51,6 +51,11 @@ public class CourseActivityDaoImp implements CourseActivityDao {
     }
 
     @Override
+    public Course findCourseByCourseId(int theId) {
+        return entityManager.find(Course.class,theId);
+    }
+
+    @Override
     public List<Course> findCoursesByInstructorId(Long theId) {
         //create query
         TypedQuery<Course> query =entityManager.createQuery("from Course where user.id = :data",Course.class);
@@ -68,8 +73,29 @@ public class CourseActivityDaoImp implements CourseActivityDao {
         TypedQuery<User> query = entityManager.createQuery(
                 "select c from User c "
                         +"JOIN FETCH c.courses_student "
-                        +"where c.id = :data",User.class);
-        query.setParameter("data",theId);
+                        +"where c.id = :data1" ,User.class);
+        query.setParameter("data1",theId);
+        //execute query
+        User student= null;
+
+        try{
+            student = query.getSingleResult();
+        }catch(NoResultException e){
+            return null;
+        }
+
+        return student;
+    }
+
+    @Override
+    public  User findCourseByStudentEmail(String email,int courseId) {
+        TypedQuery<User> query = entityManager.createQuery(
+                "select c from User c "
+                        +"JOIN FETCH c.courses_student s "
+                        +"where c.email = :data1 and s.id = :data2 ",User.class);
+        query.setParameter("data1",email);
+        query.setParameter("data2",courseId);
+
         //execute query
         User student= null;
 
