@@ -49,10 +49,10 @@
         <!-- Masthead Subheading-->
 <!--        <p class="masthead-subheading font-weight-light mb-0">Graphic Artist - Web Designer - Illustrator</p>-->
         <div class="box" >
-            <h1 class="primary-title">Candidate Dashboard</h1>
+<!--            <h1 class="primary-title">Candidate Dashboard</h1>-->
             <form id="myForm" th:action="@{/global-search/}">
                 <div class="inner">
-                    <input id="searchCourseName" class="radius-left" type="text" placeholder="Search for a courses" name="searchCourseName" th:value="${searchCourseName}"/>
+                    <input id="searchCourseName" class="radius-left" type="text" placeholder="Search for courses" name="searchCourseName" th:value="${searchCourseName}"/>
                     <button class="radius-right" type="submit" form="myForm"><i class="fa fa-search"></i></button>
                 </div>
             </form>
