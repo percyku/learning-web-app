@@ -6,6 +6,8 @@ import com.percyku.learning_web_app.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -18,7 +20,7 @@ import java.util.List;
 
 @Controller
 public class UserController {
-
+    private final static Logger log = LoggerFactory.getLogger(CourseActivityController.class);
     private UserService userService;
 
     public UserController(UserService userService) {
@@ -27,6 +29,7 @@ public class UserController {
 
     @GetMapping("/login")
     public String login(){
+
         return "login";
 
     }
@@ -55,7 +58,6 @@ public class UserController {
 
     @PostMapping("/register/new")
     public String userRegistration(@Valid User user, Model model){
-//        System.out.println("User::" +user);
 
 
         User checkUser= userService.getUserEmail(user.getEmail());
@@ -70,8 +72,7 @@ public class UserController {
         }
 
         userService.createUser(user);
-
-        return "redirect:/dashboard/";
+        return "redirect:/login";
     }
 
     @GetMapping("/error")

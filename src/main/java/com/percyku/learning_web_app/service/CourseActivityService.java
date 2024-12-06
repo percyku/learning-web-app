@@ -154,6 +154,38 @@ public class CourseActivityService {
     }
 
 
+    public List<PageCourse> getCourseByCourseName(String courseName) {
+        List<Course> tmpCourses = courseActivityDao.findCoursesByCourseName(courseName);
+        List<PageCourse> res=new ArrayList<>();
+        log.debug(tmpCourses.toString());
+        if(tmpCourses.size() >0){
+            User tmpInstructor=tmpCourses.get(0).getUser();
+
+            for(Course tmpCourse : tmpCourses){
+                List<Long>students= new ArrayList<>();
+
+                for(User tmpStudent:tmpCourse.getUsers()){
+
+                    students.add(tmpStudent.getId());
+                }
+
+                PageCourse tmpPageCourse = new PageCourse(
+                        tmpCourse.getId(),
+                        tmpCourse.getTitle(),
+                        tmpCourse.getDescription(),
+                        tmpCourse.getPrice(),
+                        tmpInstructor,
+                        students
+                );
+                res.add(tmpPageCourse);
+            }
+
+        }
+
+        return res;
+    }
+
+
 
     public Object getCurrentUser() {
 

@@ -46,11 +46,18 @@ public class WebSecurityConfig {
 
         http.authorizeHttpRequests(auth->{
             auth.requestMatchers(publicUrl).permitAll();
-            auth.anyRequest().authenticated();
+            auth.requestMatchers("/register","/login","/logout").permitAll();
+            auth.requestMatchers("/logout","/dashboard/","/dashboard/course/{id}").authenticated();
+            auth.requestMatchers("/dashboard/add","/dashboard/addNew").hasRole("INSTRUCTOR");
+            auth.requestMatchers("/instructor_profile/","/instructor_profile/addNew").hasRole("INSTRUCTOR");
+            auth.requestMatchers("/dashboard/enroll").hasRole("STUDENT");
+            auth.requestMatchers("/student_profile/","/student_profile/addNew").hasRole("STUDENT");
+            auth.anyRequest().denyAll();
+
+//            auth.anyRequest().authenticated();
         });
 
-        http.formLogin(form->form.loginPage("/login").permitAll()
-                        .successHandler(customAuthenticationSuccessHandler))
+        http.formLogin(form->form.loginPage("/login").successHandler(customAuthenticationSuccessHandler))
                 .logout(logout ->{
                     logout.logoutUrl("/logout");
                     logout.logoutSuccessUrl("/");

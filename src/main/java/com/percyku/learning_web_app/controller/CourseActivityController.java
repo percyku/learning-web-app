@@ -47,7 +47,7 @@ public class CourseActivityController {
                 log.debug("result:"+pageCourses);
                 model.addAttribute("pageCourse", pageCourses);
             }else{
-                log.debug("job:"+searchCourseName);
+                log.debug("courseName:"+searchCourseName);
                 List<PageCourse> pageCourses =null;
                 if(searchCourseName != null) {
                     pageCourses=courseActivityService.getCourseByCourseName(user.getEmail(),searchCourseName);
@@ -62,6 +62,17 @@ public class CourseActivityController {
         return "dashboard";
     }
 
+    @GetMapping("/global-search/")
+    public String globalSearchJobs(Model model,@RequestParam(value = "searchCourseName", required = false) String searchCourseName){
+        log.debug("courseName:"+searchCourseName);
+        List<PageCourse> pageCourses =courseActivityService.getCourseByCourseName(searchCourseName != null?searchCourseName:"");
+        log.debug("result:"+pageCourses);
+        model.addAttribute("pageCourse", pageCourses);
+
+        return "global-search";
+    }
+
+
 
 
 
@@ -72,20 +83,20 @@ public class CourseActivityController {
         return "add-courses";
     }
 
-    @GetMapping("/dashboard/edit/{id}")
-    public String editCourse(@PathVariable("id")int id , Model model){
-
-        Course course = courseActivityService.findCourseById(id);
-        User user =(User) userService.getCurrentUser();
-
-
-        if(course == null || user == null) return "redirect:/dashboard/";
-        if(course.getUser().getId() != user.getId()) return "redirect:/dashboard/";
-
-        model.addAttribute("course",course);
-        model.addAttribute("readonlyEnable",true);
-        return "add-courses";
-    }
+//    @GetMapping("/dashboard/edit/{id}")
+//    public String editCourse(@PathVariable("id")int id , Model model){
+//
+//        Course course = courseActivityService.findCourseById(id);
+//        User user =(User) userService.getCurrentUser();
+//
+//
+//        if(course == null || user == null) return "redirect:/dashboard/";
+//        if(course.getUser().getId() != user.getId()) return "redirect:/dashboard/";
+//
+//        model.addAttribute("course",course);
+//        model.addAttribute("readonlyEnable",true);
+//        return "add-courses";
+//    }
 
 
     @GetMapping("/dashboard/course/{id}")
@@ -126,7 +137,12 @@ public class CourseActivityController {
     }
 
     @PostMapping("/dashboard/addNew")
-    public String addNew(Course course,Model model){
+    public String addNew(@RequestParam(value = "action",required = true) String action,
+                         Course course,Model model){
+        log.debug("action:"+action);
+        if(action.equals("back")){
+            return "redirect:/dashboard/";
+        }
 
         Course checkCourse = courseActivityService.findCourseById(course.getId());
 
@@ -150,7 +166,12 @@ public class CourseActivityController {
 
 
     @PostMapping("/dashboard/enroll")
-    public String enrollCourse(Course course){
+    public String enrollCourse(@RequestParam(value = "action",required = true) String action,
+                               Course course){
+        log.debug("action:"+action);
+        if(action.equals("back")){
+            return "redirect:/dashboard/";
+        }
         log.debug("enrollCourse:"+course);
 
         courseActivityService.enrollCourse(course.getId());

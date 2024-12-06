@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org/" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Course Information</title>
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css} "/>
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/font-awesome.min.css}"/>
     <link rel="stylesheet" type="text/css" media="all" th:href="@{/css/styles.css}"/>
@@ -42,8 +42,8 @@
 
             <br>
 
-            <button type="submit" class="btn btn-primary" th:disabled="${enrollEnable}">Enroll</button>
-            <button type="submit" class="btn btn-primary" th:href="@{/dashboard/}">back</button>
+            <button type="submit" class="btn btn-primary" name="action" value="enroll" th:disabled="${enrollEnable}">Enroll</button>
+            <button type="submit" class="btn btn-primary" name="action" value="back" >back</button>
 
         </form>
     </div>
